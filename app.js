@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const topbar = document.getElementById('topbar');
     const whoami = document.getElementById('whoami');
     const logoutBtn = document.getElementById('logoutBtn');
+    const googleSignInBtn = document.getElementById("googleSignInBtn");
 
     // Tabs & forms
     const tabLogin = document.getElementById('tabLogin');
@@ -176,6 +177,50 @@ document.addEventListener('DOMContentLoaded', () => {
         onSignedOut();
     });
 
+    // Google Sign-In functionality
+    googleSignInBtn.addEventListener("click", async () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        try {
+            const result = await auth.signInWithPopup(provider);
+            const user = result.user;
+            handleLogin(user);
+        } catch (error) {
+            console.error("Google Sign-In Error:", error.message);
+        }
+    });
+
+    // Handle login state
+    const handleLogin = (user) => {
+        document.getElementById("whoami").textContent = user.email;
+        document.getElementById("topbar").classList.remove("hidden");
+        document.getElementById("authCard").classList.add("hidden");
+        document.getElementById("priceCard").classList.remove("hidden");
+    };
+
+    // Handle logout state
+    const handleLogout = () => {
+        document.getElementById("whoami").textContent = "";
+        document.getElementById("topbar").classList.add("hidden");
+        document.getElementById("authCard").classList.remove("hidden");
+        document.getElementById("priceCard").classList.add("hidden");
+    };
+
+    // Logout functionality
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+        await auth.signOut();
+        handleLogout();
+    });
+
+    // Check auth state on page load
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            handleLogin(user);
+        } else {
+            handleLogout();
+        }
+    });
+
     // ---------------------------
     // Auth state transitions
     // ---------------------------
@@ -207,4 +252,26 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         onSignedOut();
     }
+
+    // ---------------------------
+    // Clock and Timezone
+    // ---------------------------
+    const clockElement = document.getElementById("clock");
+    const timezoneElement = document.getElementById("timezone");
+
+    const updateClock = () => {
+        const now = new Date();
+        const options = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        const timeString = now.toLocaleTimeString('en-US', options);
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        clockElement.textContent = timeString;
+        timezoneElement.textContent = timeZone;
+    };
+
+    // Update the clock every second
+    setInterval(updateClock, 100);
+
+    // Initialize the clock
+    updateClock();
 });

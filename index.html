@@ -262,8 +262,36 @@
         <div id="lastUpdated"></div>
     </div>
 
+    <!-- Clock Card -->
+    <div id="clockCard" class="card center">
+        <div class="label">Current Time</div>
+        <div id="clock" class="price">Loading...</div>
+        <div class="label">Time Zone</div>
+        <div id="timezone" class="note">Loading...</div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="app.js"></script>
+
+    <!-- Add Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7V7Abd4pVy5QPepISnr5BI10bGUT_3IE",
+            authDomain: "etherium-price-checker.firebaseapp.com",
+            projectId: "etherium-price-checker",
+            storageBucket: "etherium-price-checker.firebasestorage.app",
+            messagingSenderId: "764921697070",
+            appId: "1:764921697070:web:39fe8e494db0304c5aa0bf"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+    </script>
 </body>
 
 </html>
